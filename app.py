@@ -1,6 +1,7 @@
 import json
 import pyodbc
 import question, answer, admin, user
+import re
 
 class app:
     connection = pyodbc.connect("driver", autocommit=True)
@@ -12,15 +13,22 @@ class app:
         while(qst_input == "q"):
 
             qst_list = qst_input.split(" ")
-            if (qst_list[0] == "where"):
+            question_type = (re.search("^(who|where|when)", qst_list)).group(0)
+             
+            if (question_type == "where"):
                 # where question
-                result = self.find_in_db(qst_list, 1)
-            elif (qst_list[0] == "when"):
+                person_name = (re.search(r'"(.*?)"', qst_list)).group(0)
+                result = self.find_in_db(person_name, 1)
+
+            elif (question_type == "when"):
                 # when question
-                result = self.find_in_db(qst_list, 2)
-            elif (qst_list[0] == "who"):
+                person_name = (re.search(r'"(.*?)"', qst_list)).group(0)
+                result = self.find_in_db(person_name, 2)
+
+            elif (question_type == "who"):
                 # who question
-                result = self.find_in_db(qst_list, 3)
+                univ_name = (re.search(r'"(.*?)"', qst_list)).group(0)
+                result = self.find_in_db(univ_name, 3)
             else :
                 # not defined yet
                 result = print("Not a recognized question.")
@@ -31,10 +39,11 @@ class app:
             qst_input = input("What\'s your question : ")
                 
     
-    def find_in_db(self, qst_list, qst_type):
+    def find_in_db(self, param, qst_type):
         ''' 1 -> where, 2 -> when, 3 -> who'''
         if qst_type == 1:
-            fac_id = f"select id from faculty where name = {qst_list[1]}"
+            
+            fac_id = f"select id from faculty where name = {param}"
             fac_id = self.connection.execute(fac_id).fetchone().id
 
             query = f"select uni_id from study where fac_id = {fac_id}"
@@ -44,14 +53,14 @@ class app:
             result = self.connection.execute(query).fetchall()
 
         elif qst_type == 2:
-            fac_id = f"select id from faculty where name = {qst_list[1]}"
+            fac_id = f"select id from faculty where name = {param}"
             fac_id = self.connection.execute(fac_id).fetchone().id
 
             query = f"select date from study where fac_id = {fac_id}"
             result = self.connection.execute(query).fetchone().date
 
         elif qst_type == 3:
-            uni_id = f"select id from university where name = {qst_list[1]}"
+            uni_id = f"select id from university where name = {param}"
             uni_id = self.connection.execute(fac_id).fetchone().id
 
             query = f"select fac_id from study where uni_id = {uni_id}"
