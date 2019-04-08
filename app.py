@@ -12,7 +12,9 @@ def run():
     while(qst_input != "q"):
 
         qst_list = qst_input
-        question_type = (re.search("^(who|where|when|how many|how long)", qst_list)).group(0)
+        question_type = "test"
+        if ((re.search("^(who|where|when|how many|how long)", qst_list))):
+            question_type = (re.search("^(who|where|when|how many|how long)", qst_list)).group(0)
         school_ = (re.search(r'(university|school)', qst_list))
         get_school = (re.search("^(get school|find school)", qst_list))
 
@@ -103,7 +105,7 @@ def find_in_db( param, qst_type, extra_condition):
                 query = f"select FacultyID from study where UniversityID = {uni_id} and GraduationDate {extra_condition[0]} {extra_condition[1]}"
                 persons_list = connection.execute(query).fetchall()
             else:
-                query = f"select FacultyID as id from study where UniversityID = {uni_id}"
+                query = f"select FacultyID from study where UniversityID = {uni_id}"
                 persons_list = connection.execute(query).fetchall()
             for person in persons_list:
                 query = f"select FacultyFname, FacultyLname from faculty where FacultyID = {person.FacultyID}"
