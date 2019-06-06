@@ -5,34 +5,41 @@ from QuestionHandler import QuestionHandler
 
 fig = Figlet()
 
-questionHandler = QuestionHandler()
+class QALauncher:
 
-print(fig.renderText("UNIV+"))
+    def run(self):
+        questionHandler = QuestionHandler()
 
-while True:
-    name = input("Please enter your username:")
-    if (name == admin.Admin.admin_name):
-        password = input("Please enter admins password:")
-        if (password == admin.Admin.admin_psw):
-            print("\n \n \n Welcome Admin, if you want to add/modify questoins collection, please check Database Manager. \n \n \n")
-            break
-        print(fig.renderText("Checking..."))
-    else:
-        print(fig.renderText("Welcome %s"%name))
-        break
-    
-    print("The password you provided is wrong.")
+        print(fig.renderText("UNIV+"))
 
-qst_input = input("What\'s your question : ")
-while(qst_input != "q"):
+        while True:
+            name = input("Please enter your username:")
+            if (name == admin.Admin.admin_name):
+                password = input("Please enter admins password:")
+                if (password == admin.Admin.admin_psw):
+                    print("\n \n \n Welcome Admin, if you want to add/modify questoins collection, please check Database Manager. \n \n \n")
+                    break
+                print(fig.renderText("Checking..."))
+            else:
+                print(fig.renderText("Welcome %s"%name))
+                break
+            
+            print("The password you provided is wrong.")
 
-    questionHandler.notifyQueRec(qst_input)
-    result = questionHandler.get_result()
+        qst_input = input("What\'s your question : ")
+        while(qst_input != "q"):
 
-    print("*********************************")
-    print(result)
-    print("*********************************")
+            questionHandler.notifyQueRec(qst_input)
+            result = questionHandler.get_result()
 
-    qst_input = input("What\'s your question : ")
-        
+            print("*********************************")
+            print(result)
+            print("*********************************")
+
+            qst_input = input("What\'s your question : ")
+
+if __name__ == "__main__":
+    qaLauncher = QALauncher()
+    qaLauncher.run()
+                
  

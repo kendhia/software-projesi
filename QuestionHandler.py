@@ -22,3 +22,6 @@ class QuestionHandler(object):
 
     def get_result(self):
         return self.result
+
+    def get_answer_ready(self):
+        return self.answer_ready

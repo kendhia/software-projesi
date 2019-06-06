@@ -3,11 +3,14 @@ import pyodbc
 class AnswerCollection(object):
     connection = None
 
+    def connectToDb(self):
+        if self.connection == None:
+            self.connection = pyodbc.connect("DSN=questioning", autocommit=True)
+        
     def getAnswerOf(self, param, qst_type, extra_condition):
         ''' 1 -> where, 2 -> when, 3 -> who 4 -> how many students 5 -> with whom 6 -> how long '''
         
-        if self.connection == None:
-            self.connection = pyodbc.connect("DSN=questioning", autocommit=True)
+        self.connectToDb()
         
         try:
 

@@ -64,6 +64,7 @@ class QuestionVerifier(object):
         except Exception as e :
             self.isAccepted = False
 
+    
     def getIsAccepted(self):
         return self.isAccepted
 
